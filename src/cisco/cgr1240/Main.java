@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by shinny on 2016/04/05.
+ */
 public class Main {
     private static StringManager strManager = new StringManager();
     private static Publisher publisher;
@@ -22,10 +25,15 @@ public class Main {
             serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
             SerialPort port = serialComm.getPort();
 
+            /*
+             * Send "set1" to ALPS sink node
+             * This prevents garbled characters
+             */
             OutputStream os = port.getOutputStream();
             os.write("set1\r".getBytes());
             os.close();
 
+            // Prepare InputStream
             InputStream is = port.getInputStream();
 
             ArrayList<Character> dataArray = new ArrayList<Character>();
@@ -36,12 +44,15 @@ public class Main {
             while (true) {
                 readBytes = is.read();
 
+                /*
+                 * Publish sensor data when it comes to the end of value
+                 * (readBytes == 13) is CR(Carriage Return) in ascii code
+                 */
                 if (readBytes == 13) {
                     dataString = strManager.getStringRepresentation(dataArray);
                     dataMap = generateDataMap(dataString);
 
                     publisher.publishData(dataMap);
-
                     dataArray.clear();
                 }
                 else {
@@ -61,6 +72,7 @@ public class Main {
         }
     }
 
+    // Format String sensor data to Map
     private static Map<String, String> generateDataMap(String dataString) {
         dataString = strManager.removeString(dataString, " ");
         dataString = strManager.removeString(dataString, "\\+");

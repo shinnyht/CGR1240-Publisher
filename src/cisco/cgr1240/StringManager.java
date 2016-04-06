@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  * Created by shinny on 2016/04/05.
  */
 public class StringManager {
+    // Make sensor data String from char List
     public static String getStringRepresentation(ArrayList<Character> list) {
         StringBuilder builder = new StringBuilder(list.size());
 
@@ -18,6 +19,7 @@ public class StringManager {
         return builder.toString();
     }
 
+    // Remove matching String from target String
     public static String removeString(String strSrc, String strRemove) {
         Pattern pattern = Pattern.compile(strRemove);
         Matcher matcher = pattern.matcher(strSrc);
@@ -26,8 +28,9 @@ public class StringManager {
         return strTmp;
     }
 
+    // Remove units from sensor data String
     public static String removeUnits(String strSrc) {
-        String regex = "\\[.+|\\(.+";
+        String regex = "\\[.+";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(strSrc);
         String strTmp = matcher.replaceAll("");
