@@ -12,29 +12,29 @@ import jp.ac.keio.sfc.ht.sox.soxlib.SoxDevice;
  * Created by shinny on 2016/04/05.
  */
 public class Publisher {
-	private static SoxDevice soxDevice;
+    private static SoxDevice soxDevice;
 
-	public Publisher (String nodeName) throws Exception {
+    public Publisher (String nodeName) throws Exception {
         // Create sox connection to sox.ht.sfc.keio.ac.jp server
         SoxConnection con = new SoxConnection("sox.ht.sfc.keio.ac.jp", true); //anonymous login
         this.soxDevice = new SoxDevice(con, nodeName); // sensor device
-	}
+    }
 
-	public void publishData(Map<String, String> dataMap) {
+    public void publishData(Map<String, String> dataMap) {
         List<TransducerValue> valueList = new ArrayList<TransducerValue>();
 
         // Add each transducer value to the List
-		for (String str: dataMap.keySet()) {
-			TransducerValue value = new TransducerValue();
-			value.setId(str);
-			value.setRawValue(dataMap.get(str));
-			value.setTypedValue(dataMap.get(str));
-			value.setCurrentTimestamp();
+        for (String str: dataMap.keySet()) {
+            TransducerValue value = new TransducerValue();
+            value.setId(str);
+            value.setRawValue(dataMap.get(str));
+            value.setTypedValue(dataMap.get(str));
+            value.setCurrentTimestamp();
 
-			valueList.add(value);
-		}
+            valueList.add(value);
+        }
 
         // Publish data to sox.ht.sfc.keio.ac.jp
         this.soxDevice.publishValues(valueList);
-	}
+    }
 }
