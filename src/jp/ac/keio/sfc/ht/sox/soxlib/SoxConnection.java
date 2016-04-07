@@ -98,7 +98,7 @@ public class SoxConnection {
 		XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration
 				.builder().setHost(server).setPort(5222)
 				.setServiceName(service).setSecurityMode(SecurityMode.disabled)
-				.setDebuggerEnabled(isDebugEnable).setConnectTimeout(30 * 1000)
+				.setConnectTimeout(30 * 1000)
 				.build();
 
 		con = new XMPPTCPConnection(config);
