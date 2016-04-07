@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class Main {
     private static StringManager strManager = new StringManager();
+    private static Map<String, String> transducerNames = organizeTransducer();
 
     public static void main(String[] args) {
 
@@ -48,9 +49,12 @@ public class Main {
                  */
                 if (readBytes == 13) {
                     dataString = strManager.getStringRepresentation(dataArray);
-                    dataMap = generateDataMap(dataString);
+                    System.out.println(dataString);
+                    if (dataString.contains("set1") && dataString.contains("SET OK")) {
+                        dataMap = generateDataMap(dataString);
 
-                    publisher.publishData(dataMap);
+                        publisher.publishData(dataMap);
+                    }
                     dataArray.clear();
                 }
                 else {
@@ -78,14 +82,39 @@ public class Main {
 
         Map<String, String> dataMap = new HashMap<String, String>();
 
-        for (int i = 1; i < dataSet.length; i++) {
+        for (int i = 2; i < dataSet.length; i++) {
             String[] d = dataSet[i].split("=", -1);
             String transducer = d[0];
             String value = strManager.removeUnits(d[1]);
 
-            dataMap.put(transducer, value);
+            dataMap.put(transducerNames.get(transducer), value);
         }
+        dataMap = addLocation(dataMap);
+
+        return dataMap;
+    }
+
+    // FIx short term representation of transducers
+    private static Map<String, String> organizeTransducer () {
+        Map<String, String> properTransducerName = new HashMap<String, String>();
+
+        properTransducerName.put("TEMP", "temperature");
+        properTransducerName.put("LIGHT", "light");
+        properTransducerName.put("HUMI", "humidity");
+        properTransducerName.put("PRES", "pressure");
+        properTransducerName.put("VBAT", "voltage");
+        properTransducerName.put("DOOR", "door");
+        properTransducerName.put("RSSI", "RSSI");
+
+        return properTransducerName;
+    }
+
+    // Set Tokyo Midtown's location
+    private static Map<String, String> addLocation (Map<String, String> dataMap) {
+        dataMap.put("latitude", "35.665575");
+        dataMap.put("longitude", "139.730451");
 
         return dataMap;
     }
 }
+
