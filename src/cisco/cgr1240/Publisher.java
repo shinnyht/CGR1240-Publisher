@@ -17,7 +17,7 @@ public class Publisher {
     public Publisher (String nodeName) throws Exception {
         // Create sox connection to sox.ht.sfc.keio.ac.jp server
         SoxConnection con = new SoxConnection("sox.ht.sfc.keio.ac.jp", true); //anonymous login
-        this.soxDevice = new SoxDevice(con, nodeName); // sensor device
+        soxDevice = new SoxDevice(con, nodeName); // sensor device
     }
 
     public void publishData(Map<String, String> dataMap) {
@@ -35,6 +35,6 @@ public class Publisher {
         }
 
         // Publish data to sox.ht.sfc.keio.ac.jp
-        this.soxDevice.publishValues(valueList);
+        soxDevice.publishValues(valueList);
     }
 }

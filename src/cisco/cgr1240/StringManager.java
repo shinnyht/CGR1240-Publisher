@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public class StringManager {
     // Make sensor data String from char List
-    public static String getStringRepresentation(ArrayList<Character> list) {
+    public String getStringRepresentation(ArrayList<Character> list) {
         StringBuilder builder = new StringBuilder(list.size());
 
         for(Character ch: list) {
@@ -20,21 +20,19 @@ public class StringManager {
     }
 
     // Remove matching String from target String
-    public static String removeString(String strSrc, String strRemove) {
+    public String removeString(String strSrc, String strRemove) {
         Pattern pattern = Pattern.compile(strRemove);
         Matcher matcher = pattern.matcher(strSrc);
-        String strTmp = matcher.replaceAll("");
 
-        return strTmp;
+        return matcher.replaceAll("");
     }
 
     // Remove units from sensor data String
-    public static String removeUnits(String strSrc) {
+    public String removeUnits(String strSrc) {
         String regex = "\\[.+";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(strSrc);
-        String strTmp = matcher.replaceAll("");
 
-        return strTmp;
+        return matcher.replaceAll("");
     }
 }

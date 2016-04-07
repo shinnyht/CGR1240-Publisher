@@ -15,14 +15,12 @@ import java.util.Map;
  */
 public class Main {
     private static StringManager strManager = new StringManager();
-    private static Publisher publisher;
-    private static SerialComm serialComm;
 
     public static void main(String[] args) {
 
         try {
-            publisher = new Publisher("CGR1240-ALPS-Sensor");
-            serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
+            Publisher publisher = new Publisher("CGR1240-ALPS-Sensor");
+            SerialComm serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
             SerialPort port = serialComm.getPort();
 
             /*
