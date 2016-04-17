@@ -1,0 +1,18 @@
+#!/bin/bash
+# SOXClient
+#
+# description: control script for SOXClient
+
+case $1 in
+    start)
+        /bin/bash /usr/local/bin/soxclient-start.sh
+    ;;
+    stop)
+        /bin/bash /usr/local/bin/soxclient-stop.sh
+    ;;
+    restart)
+        /bin/bash /usr/local/bin/soxclient-stop.sh
+        /bin/bash /usr/local/bin/soxclient-start.sh
+    ;;
+esac
+exit 0
