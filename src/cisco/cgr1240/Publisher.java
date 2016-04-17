@@ -34,6 +34,7 @@ public class Publisher {
             valueList.add(value);
         }
 
+        System.out.println("Publishing...");
         // Publish data to sox.ht.sfc.keio.ac.jp
         soxDevice.publishValues(valueList);
         System.out.println("Published");

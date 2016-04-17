@@ -21,7 +21,8 @@ public class Main {
 
         try {
             Publisher publisher = new Publisher("CGR1240-ALPS-Sensor");
-            SerialComm serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
+            // SerialComm serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
+            SerialComm serialComm = new SerialComm("/dev/ttyUSB1");
             SerialPort port = serialComm.getPort();
 
             /*
@@ -50,7 +51,7 @@ public class Main {
                 if (readBytes == 13) {
                     dataString = strManager.getStringRepresentation(dataArray);
                     System.out.println(dataString);
-                    if (dataString.contains("set1") && dataString.contains("SET OK")) {
+                    if (!dataString.contains("set1") && !dataString.contains("SET OK")) {
                         dataMap = generateDataMap(dataString);
 
                         publisher.publishData(dataMap);
