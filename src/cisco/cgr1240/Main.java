@@ -22,7 +22,7 @@ public class Main {
         try {
             Publisher publisher = new Publisher("CGR1240-ALPS-Sensor");
             // SerialComm serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
-            SerialComm serialComm = new SerialComm("/dev/ttyUSB1");
+            SerialComm serialComm = new SerialComm("/dev/ttyUSB0");
             SerialPort port = serialComm.getPort();
 
             /*
