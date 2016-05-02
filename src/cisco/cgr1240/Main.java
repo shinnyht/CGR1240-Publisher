@@ -20,7 +20,8 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            Publisher publisher = new Publisher("CGR1240-ALPS-Sensor");
+            Publisher rawPublisher = new Publisher("CGR1240-ALPS-Sensor");
+            Publisher processedPublisher = new Publisher("CGR1240-Processed-Sensor");
             // SerialComm serialComm = new SerialComm("/dev/tty.usbserial-A903C71K");
             SerialComm serialComm = new SerialComm("/dev/ttyUSB0");
             SerialPort port = serialComm.getPort();
@@ -38,7 +39,8 @@ public class Main {
 
             ArrayList<Character> dataArray = new ArrayList<Character>();
             String dataString;
-            Map<String, String> dataMap;
+            Map<String, String> rawDataMap;
+            Map<String, String> processedDataMap;
 
             int readBytes;
             while (true) {
@@ -52,9 +54,11 @@ public class Main {
                     dataString = strManager.getStringRepresentation(dataArray);
                     System.out.println(dataString);
                     if (!dataString.contains("set1") && !dataString.contains("SET OK")) {
-                        dataMap = generateDataMap(dataString);
+                        rawDataMap = generateDataMap(dataString);
+                        rawPublisher.publishData(rawDataMap);
 
-                        publisher.publishData(dataMap);
+                        processedDataMap = extractDataMap(rawDataMap);
+                        processedPublisher.publishData(processedDataMap);
                     }
                     dataArray.clear();
                 }
@@ -93,6 +97,20 @@ public class Main {
         dataMap = addLocation(dataMap);
 
         return dataMap;
+    }
+
+    // Format String sensor data to Map
+    private static Map<String, String> extractDataMap(Map<String, String> dataMap) {
+        Map<String, String> processedDataMap = new HashMap<String, String>();
+        int humid = Integer.parseInt(dataMap.get("humidity"));
+        int temp = Integer.parseInt(dataMap.get("humidity"));
+
+        double discomfortness = 0.81 * temp + 0.01 * humid * (0.99 * temp - 14.3) + 46.3;
+
+        processedDataMap.put("discomfortness", String.valueOf(discomfortness));
+        processedDataMap = addLocation(processedDataMap);
+
+        return processedDataMap;
     }
 
     // FIx short term representation of transducers
