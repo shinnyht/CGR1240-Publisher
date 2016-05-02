@@ -107,7 +107,7 @@ public class Main {
 
         double discomfortness = 0.81 * temp + 0.01 * humid * (0.99 * temp - 14.3) + 46.3;
 
-        processedDataMap.put("discomfortness", String.valueOf(discomfortness));
+        processedDataMap.put("Discomfortness", String.valueOf(discomfortness));
         processedDataMap = addLocation(processedDataMap);
 
         return processedDataMap;
