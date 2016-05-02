@@ -20,13 +20,18 @@ import org.jivesoftware.smackx.pubsub.PublishModel;
  */
 public class NodeCreator {
     private static SoxConnection conn;
-    private static Map<String, String> ALPS_TRANSDUCERS = new HashMap<String, String>();
 
     public static void main (String[] args) throws IOException, XMPPException, SmackException {
+        Map<String, String> alpsTransducers = new HashMap<String, String>();
+        Map<String, String> processedTransducers = new HashMap<String, String>();
         NodeCreator nodeCreator = new NodeCreator();
+
         // Create sensor node on sox
-        nodeCreator.setTransducerMap();
-        nodeCreator.createNode("CGR1240-ALPS-Sensor");
+        nodeCreator.setALPSTransducerMap(alpsTransducers);
+        nodeCreator.createNode("CGR1240-ALPS-Sensor", alpsTransducers);
+
+        nodeCreator.setProcessedTransducerMap(processedTransducers);
+        nodeCreator.createNode("CGR1240-Processed-Sensor", processedTransducers);
     }
 
     private NodeCreator() throws IOException, XMPPException, SmackException {
@@ -34,19 +39,25 @@ public class NodeCreator {
         conn = new SoxConnection("sox.ht.sfc.keio.ac.jp", "guest", "miroguest", true);
     }
 
-    private void setTransducerMap () {
-        ALPS_TRANSDUCERS.put("latitude", "lat");
-        ALPS_TRANSDUCERS.put("longitude", "lon");
-        ALPS_TRANSDUCERS.put("temperature", "Celsius");
-        ALPS_TRANSDUCERS.put("light", "lux");
-        ALPS_TRANSDUCERS.put("humidity", "%");
-        ALPS_TRANSDUCERS.put("pressure", "hPa");
-        ALPS_TRANSDUCERS.put("voltage", "V");
-        ALPS_TRANSDUCERS.put("door", "Open/Close");
-        ALPS_TRANSDUCERS.put("RSSI", "dBm");
+    private void setALPSTransducerMap (Map<String, String> alpsTransducers) {
+        alpsTransducers.put("latitude", "lat");
+        alpsTransducers.put("longitude", "lon");
+        alpsTransducers.put("temperature", "Celsius");
+        alpsTransducers.put("light", "lux");
+        alpsTransducers.put("humidity", "%");
+        alpsTransducers.put("pressure", "hPa");
+        alpsTransducers.put("voltage", "V");
+        alpsTransducers.put("door", "Open/Close");
+        alpsTransducers.put("RSSI", "dBm");
     }
 
-    private void createNode (String nodeName) {
+    private void setProcessedTransducerMap (Map<String, String> processedTransducers) {
+        processedTransducers.put("latitude", "lat");
+        processedTransducers.put("longitude", "lon");
+        processedTransducers.put("Discomfortness", "");
+    }
+
+    private void createNode (String nodeName, Map<String, String> transducers) {
         Device device = new Device();
         device.setId(nodeName); 
         device.setDeviceType(DeviceType.INDOOR_WEATHER);
@@ -54,11 +65,11 @@ public class NodeCreator {
 
         List<Transducer> transducerList = new ArrayList<Transducer>();
 
-        for (String t: ALPS_TRANSDUCERS.keySet()) {
+        for (String t: transducers.keySet()) {
             Transducer transducer = new Transducer();
             transducer.setName(t);
             transducer.setId(t);
-            transducer.setUnits(ALPS_TRANSDUCERS.get(t));
+            transducer.setUnits(transducers.get(t));
             transducerList.add(transducer);
         }
 
